@@ -15,6 +15,8 @@ const quotes = [
 let words = [];
 let wordIndex = 0;
 let startTime = Date.now();
+let bestTime = null;
+let partiTime = [];
 
 //page elements
 const quoteElement = document.getElementById('quote');
@@ -50,6 +52,7 @@ document.getElementById('start-button').addEventListener('click', () => {
     //start the timer
     startTime = Date.now();
 });
+
 typedValueElement.addEventListener('input', () => {
     //get the current word
     const currentWord = words[wordIndex];
@@ -59,7 +62,15 @@ typedValueElement.addEventListener('input', () => {
         //end of sentence
         //display success
         const elapsedTime = new Date().getTime() - startTime;
-        const message = `Congratulations! You finished in ${elapsedTime / 1000} seconds.`;
+        let message = `Congratulations! You finished in ${elapsedTime / 1000} seconds.`;
+        partiTime.push(elapsedTime);
+        for (let i = 0; i < partiTime.length; i++) {
+            if (bestTime === null || partiTime[i] < bestTime) {
+                bestTime = partiTime[i];
+
+            }
+        }
+        message += ` Your best time is ${bestTime / 1000} seconds.`;
         messageElement.innerText = message;
     } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
         //end of word
